@@ -72,13 +72,16 @@ drop policy if exists "public reads published project media" on public.project_m
 create policy "public reads published project media" on public.project_media for select using (
   exists (select 1 from public.projects p where p.id = project_id and p.published = true)
 );
+create or replace function public.is_public_media(asset_id uuid)
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (
+    select 1 from project_media pm join projects p on p.id = pm.project_id
+    where pm.media_id = asset_id and p.published and p.portfolio and p.visibility = 'PUBLIC' and pm.visibility = 'PUBLIC'
+  );
+$$;
+grant execute on function public.is_public_media(uuid) to anon, authenticated;
 drop policy if exists "public reads portfolio assets" on public.media_assets;
-create policy "public reads portfolio assets" on public.media_assets for select using (
-  exists (
-    select 1 from public.project_media pm join public.projects p on p.id = pm.project_id
-    where pm.media_id = media_assets.id and p.published = true
-  )
-);
+create policy "public reads portfolio assets" on public.media_assets for select to anon, authenticated using (public.is_public_media(id));
 
 insert into public.clients (name, company, email, phone)
 select * from (values
