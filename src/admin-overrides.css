@@ -1,0 +1,8 @@
+.studio-access{display:flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.26);padding:9px 12px;font:500 .58rem var(--mono);letter-spacing:.08em;transition:.2s}
+.studio-access:hover{background:#fff;color:#090909}
+.footer-admin{display:block;margin-top:9px;font:500 .65rem var(--mono);text-transform:uppercase;text-decoration:underline;text-underline-offset:4px}
+.form-error{color:#ff8067;font-size:.75rem;margin:0}
+.loading-panel{min-height:180px;display:grid;place-items:center;color:#747b84}
+.logout{margin-top:20px;display:flex;align-items:center;gap:8px;border:1px solid var(--admin-line);background:#fff;padding:10px 13px;border-radius:5px}
+.logout svg{width:16px}
+@media(max-width:1180px){.studio-access{font-size:0;padding:10px}.studio-access svg{width:17px}}
