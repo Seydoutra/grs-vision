@@ -118,3 +118,11 @@ select * from (values
  ('Zoom F6','Audio','GRS-AUD-001',1,'MAINTENANCE')
 ) as d(name,category,serial_number,quantity,status)
 where not exists (select 1 from public.equipment e where e.serial_number = d.serial_number);
+
+-- API privileges: RLS policies above still decide which rows are visible.
+grant select on public.projects, public.project_media, public.media_assets to anon;
+grant insert on public.inquiries, public.analytics_events to anon;
+grant select, insert, update, delete on public.clients, public.projects, public.project_media, public.media_assets,
+  public.client_links, public.quotes, public.quote_items, public.invoices, public.invoice_items, public.payments,
+  public.teams, public.shoots, public.shoot_team, public.equipment, public.communications to authenticated;
+grant select on public.analytics_events, public.inquiries, public.downloads to authenticated;
