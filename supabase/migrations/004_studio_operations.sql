@@ -120,8 +120,34 @@ select * from (values
 where not exists (select 1 from public.equipment e where e.serial_number = d.serial_number);
 
 -- API privileges: RLS policies above still decide which rows are visible.
+-- Replace early unscoped policies so anonymous reads never evaluate profiles.
+drop policy if exists "admins manage projects" on public.projects;
+create policy "admins manage projects" on public.projects for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins manage media" on public.media_assets;
+create policy "admins manage media" on public.media_assets for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins manage clients" on public.clients;
+create policy "admins manage clients" on public.clients for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins manage project media" on public.project_media;
+create policy "admins manage project media" on public.project_media for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins manage services" on public.service_catalog;
+create policy "admins manage services" on public.service_catalog for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins manage quotes" on public.quotes;
+create policy "admins manage quotes" on public.quotes for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins manage quote items" on public.quote_items;
+create policy "admins manage quote items" on public.quote_items for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins manage invoices" on public.invoices;
+create policy "admins manage invoices" on public.invoices for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins manage invoice items" on public.invoice_items;
+create policy "admins manage invoice items" on public.invoice_items for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins manage payments" on public.payments;
+create policy "admins manage payments" on public.payments for all to authenticated using (public.is_studio_admin()) with check (public.is_studio_admin());
+drop policy if exists "admins read analytics" on public.analytics_events;
+create policy "admins read analytics" on public.analytics_events for select to authenticated using (public.is_studio_admin());
+
 grant select on public.projects, public.project_media, public.media_assets to anon;
 grant insert on public.inquiries, public.analytics_events to anon;
+grant select on public.profiles to authenticated;
+grant select, insert, update, delete on public.service_catalog to authenticated;
 grant select, insert, update, delete on public.clients, public.projects, public.project_media, public.media_assets,
   public.client_links, public.quotes, public.quote_items, public.invoices, public.invoice_items, public.payments,
   public.teams, public.shoots, public.shoot_team, public.equipment, public.communications to authenticated;
