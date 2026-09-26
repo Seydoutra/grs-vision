@@ -3,6 +3,7 @@ import { HashRouter } from 'react-router-dom'
 import App from './App'
 import './styles.css'
 import './admin-overrides.css'
+import './refinement.css'
 
 // Supabase places recovery/invitation tokens in the URL fragment. Remember the
 // intent before HashRouter replaces that fragment with the application route.
